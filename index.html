@@ -47,9 +47,26 @@
   /* slides */
   .deck{position:fixed;inset:0;display:grid;place-items:center;padding:84px 6vw 92px}
   
-  /* Ajuste de scroll aplicado aqui (.slide) */
-  .slide{position:absolute;inset:84px 6vw 92px;display:flex;flex-direction:column;justify-content:center;max-width:1040px;margin:0 auto;opacity:0;visibility:hidden;transform:translateY(14px);pointer-events:none;transition:opacity .45s ease,transform .45s ease,visibility 0s linear .45s;overflow-y:auto;scrollbar-width:none;}
+  /* TÉCNICA DE SAFE CENTERING APLICADA AQUI */
+  .slide{
+    position:absolute; inset:84px 6vw 92px;
+    display:flex; flex-direction:column; justify-content:flex-start; /* Mudado de center para flex-start */
+    max-width:1040px; margin:0 auto;
+    opacity:0; visibility:hidden; transform:translateY(14px); pointer-events:none;
+    transition:opacity .45s ease,transform .45s ease,visibility 0s linear .45s;
+    overflow-y:auto; scrollbar-width:none;
+  }
   .slide::-webkit-scrollbar{display:none;}
+  
+  /* Os espaçadores dinâmicos que corrigem o corte no topo e permitem scroll no final */
+  .slide::before, .slide::after {
+    content: "";
+    margin: auto;
+    display: block;
+    min-height: 40px; /* Garante 40px de respiro no topo e no fundo */
+    flex-shrink: 0;
+  }
+
   .slide.active{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .45s ease,transform .45s ease,visibility 0s}
   @media (prefers-reduced-motion:reduce){.slide{transition:opacity .2s}.slide.active{transform:none}.progress{transition:none}}
 
@@ -115,11 +132,7 @@
   .arrows button:disabled{opacity:.3;cursor:default}
   .hint{font-family:"Space Mono";font-size:11px;letter-spacing:.12em;color:var(--mist);text-transform:uppercase}
 
-  /* Regras de responsividade e bloqueio de landscape */
-  @media(max-height:800px), (max-width:680px){
-    /* Alinha o conteúdo ao topo para evitar corte ao fazer scroll */
-    .slide{justify-content:flex-start;padding-top:10px;padding-bottom:40px;}
-  }
+  /* Responsividade */
   @media(max-width:680px){.hint{display:none}.biz{grid-template-columns:1fr}.grid-cards{grid-template-columns:1fr 1fr}.slide{inset:78px 5vw 84px}.deck{padding:78px 5vw 84px}}
   @media(max-width:480px){.grid-cards{grid-template-columns:1fr}}
   :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
