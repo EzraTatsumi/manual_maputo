@@ -46,7 +46,10 @@
 
   /* slides */
   .deck{position:fixed;inset:0;display:grid;place-items:center;padding:84px 6vw 92px}
-  .slide{position:absolute;inset:84px 6vw 92px;display:flex;flex-direction:column;justify-content:center;max-width:1040px;margin:0 auto;opacity:0;visibility:hidden;transform:translateY(14px);pointer-events:none;transition:opacity .45s ease,transform .45s ease,visibility 0s linear .45s}
+  
+  /* Ajuste de scroll aplicado aqui (.slide) */
+  .slide{position:absolute;inset:84px 6vw 92px;display:flex;flex-direction:column;justify-content:center;max-width:1040px;margin:0 auto;opacity:0;visibility:hidden;transform:translateY(14px);pointer-events:none;transition:opacity .45s ease,transform .45s ease,visibility 0s linear .45s;overflow-y:auto;scrollbar-width:none;}
+  .slide::-webkit-scrollbar{display:none;}
   .slide.active{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .45s ease,transform .45s ease,visibility 0s}
   @media (prefers-reduced-motion:reduce){.slide{transition:opacity .2s}.slide.active{transform:none}.progress{transition:none}}
 
@@ -111,14 +114,45 @@
   .arrows button:hover:not(:disabled){border-color:var(--amber);background:rgba(231,162,60,.12)}
   .arrows button:disabled{opacity:.3;cursor:default}
   .hint{font-family:"Space Mono";font-size:11px;letter-spacing:.12em;color:var(--mist);text-transform:uppercase}
+
+  /* Regras de responsividade e bloqueio de landscape */
+  @media(max-height:800px), (max-width:680px){
+    /* Alinha o conteúdo ao topo para evitar corte ao fazer scroll */
+    .slide{justify-content:flex-start;padding-top:10px;padding-bottom:40px;}
+  }
   @media(max-width:680px){.hint{display:none}.biz{grid-template-columns:1fr}.grid-cards{grid-template-columns:1fr 1fr}.slide{inset:78px 5vw 84px}.deck{padding:78px 5vw 84px}}
   @media(max-width:480px){.grid-cards{grid-template-columns:1fr}}
   :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
+
+  /* Tela de aviso para giro de aparelho (Landscape Lock) */
+  .rotate-device {
+    display: none;
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg2); color: var(--sand);
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 30px;
+  }
+  .rotate-device h2 { font-family: "Space Grotesk", sans-serif; color: var(--amber); margin: 0 0 10px; }
+  .rotate-device p { font-family: "Hanken Grotesk", sans-serif; color: var(--mist); font-size: 16px; max-width: 320px; line-height: 1.5; margin: 0; }
+  .rotate-icon { font-size: 48px; margin-bottom: 20px; animation: tilt 2s infinite ease-in-out; display: inline-block; }
+  @keyframes tilt { 0% { transform: rotate(-90deg); } 50% { transform: rotate(0deg); } 100% { transform: rotate(-90deg); } }
+
+  @media (max-width: 900px) and (orientation: landscape) {
+    .rotate-device { display: flex; }
+    .topbar, .nav, .progress, .deck, .index, .stage { display: none !important; }
+  }
 </style>
 </head>
 <body>
 <div class="stage"></div>
 <div class="progress" id="prog"></div>
+
+<!-- Trava de landscape -->
+<div class="rotate-device" aria-hidden="true">
+  <span class="rotate-icon">📱</span>
+  <h2>Gire o aparelho</h2>
+  <p>Esta apresentação foi otimizada para leitura na vertical (modo retrato).</p>
+</div>
 
 <div class="topbar">
   <div class="brand"><span class="star"></span><b>TRANSIÇÃO · MAPUTO</b></div>
